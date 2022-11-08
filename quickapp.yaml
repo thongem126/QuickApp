@@ -18,7 +18,7 @@ spec:
           image: thongle0610/quickapp:vk8s
           resources:
             limits:
-              memory: "100Mi"
+              memory: "2Gi"
               cpu: "0.5"
           ports:
             - containerPort: 1111
