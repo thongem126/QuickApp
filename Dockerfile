@@ -14,7 +14,7 @@ RUN dotnet restore
 COPY QuickApp/. ./QuickApp/
 COPY DAL/. ./DAL/
 RUN dotnet publish QuickApp.sln --configuration Release --output ./WebApi
-RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p MinhThong@1234
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p B@oL0ng@123456
 RUN dotnet dev-certs https --trust
 
 # Build runtime image

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: app2
-          image: thongle0610/quickapp
+          image: thongle0610/quickapp:vk8s
           resources:
             limits:
               memory: "900Mi"
