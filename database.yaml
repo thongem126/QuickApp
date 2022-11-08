@@ -29,8 +29,7 @@ spec:
           image: mcr.microsoft.com/mssql/server:2022-latest
           resources:
             limits:
-              memory: "300Mi"
-              cpu: "300m"
+              memory: "0.5Gi"
           env:
             - name: ACCEPT_EULA
               value: "Y"
