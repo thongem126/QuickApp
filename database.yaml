@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: quickapp-db
+---
+# Create the SQL Server deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql-deployment
+  namespace: quickapp-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mssql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: mssql
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          resources:
+            limits:
+              memory: "300Mi"
+              cpu: "300m"
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: "B@oL0ng@123456"
+          ports:
+            - containerPort: 1433
+---
+# Create cluster IP for database
+apiVersion: v1
+kind: Service
+metadata:
+  name: quickapp-db-ip
+  namespace: quickapp-db
+spec:
+  type: ClusterIP
+  selector:
+    app: mssql
+  ports:
+    - port: 1433
+      targetPort: 1433

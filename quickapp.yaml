@@ -1,0 +1,53 @@
+# Create app quickapp
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quickapp-k8s
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app2
+  template:
+    metadata:
+      labels:
+        app: app2
+    spec:
+      containers:
+        - name: app2
+          image: thongle0610/quickapp
+          resources:
+            limits:
+              memory: "900Mi"
+              cpu: "900m"
+          ports:
+            - containerPort: 1111
+            - containerPort: 1112
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"                   
+            - name: ASPNETCORE_URLS
+              value: "https://+:1112;http://+:1111"
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Password
+              value: "B@oL0ng@123456"
+            - name: ASPNETCORE_Kestrel__Certificates__Default__Path
+              value: "/https/aspnetapp.pfx"
+---
+# Create app node port for quickapp
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport
+spec:
+  selector:
+     app: app2
+  type: NodePort
+  ports:
+    - name: http
+      port: 1111
+      targetPort: 1111
+      nodePort: 31080
+    - name: https
+      port: 1112
+      targetPort: 1112
+      nodePort: 31443

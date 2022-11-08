@@ -1,0 +1,34 @@
+version: "2"
+services:
+  db:
+      image: "mcr.microsoft.com/mssql/server:2022-latest"
+      container_name: quickappdb 
+      networks:
+        quicknet:
+            ipv4_address: 172.28.0.2
+      environment:
+        - SA_PASSWORD=B@oL0ng@123456
+        - ACCEPT_EULA=Y
+  app:
+      image: "quickapp"
+      networks:
+        quicknet:
+          ipv4_address: 172.28.0.4
+      container_name: angular_app
+      depends_on:
+        - db
+      ports:
+        - "80:5000"  
+        - "443:5001"
+      environment:
+        - ASPNETCORE_URLS=https://+:5001;http://+:5000
+        - ASPNETCORE_Kestrel__Certificates__Default__Password=B@oL0ng@123456
+        - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx 
+networks:
+  quicknet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          ip_range: 172.28.0.0/24
+          gateway: 172.28.0.255
