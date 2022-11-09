@@ -18,7 +18,7 @@ spec:
           image: thongle0610/quickapp:vk8s
           resources:
             limits:
-              memory: "2Gi"
+              memory: "1Gi"
               cpu: "0.5"
           ports:
             - name: liveness-port
