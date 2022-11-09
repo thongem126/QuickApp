@@ -21,8 +21,21 @@ spec:
               memory: "2Gi"
               cpu: "0.5"
           ports:
-            - containerPort: 1111
-            - containerPort: 1112
+            - name: liveness-port
+              containerPort: 1111
+              hostPort: 1111         
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: liveness-port
+            failureThreshold: 1
+            periodSeconds: 20
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: liveness-port
+            failureThreshold: 30
+            periodSeconds: 35
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"                   
