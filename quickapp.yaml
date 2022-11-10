@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: quickapp-k8s
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: app2
@@ -21,13 +21,13 @@ spec:
               memory: "1Gi"
               cpu: "0.5"
           ports:
-            - containerPort: 1111
-            - containerPort: 1112
+            - containerPort: 5000
+            - containerPort: 5001
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"                   
             - name: ASPNETCORE_URLS
-              value: "https://+:1112;http://+:1111"
+              value: "https://+:5001;http://+:5000"
             - name: ASPNETCORE_Kestrel__Certificates__Default__Password
               value: "B@oL0ng@123456"
             - name: ASPNETCORE_Kestrel__Certificates__Default__Path
@@ -40,14 +40,14 @@ metadata:
   name: nodeport
 spec:
   selector:
-     app: app2
+      app: app2
   type: NodePort
   ports:
     - name: http
-      port: 1111
-      targetPort: 1111
+      port: 5000
+      targetPort: 5000
       nodePort: 31080
     - name: https
-      port: 1112
-      targetPort: 1112
+      port: 5001
+      targetPort: 5001
       nodePort: 31443
